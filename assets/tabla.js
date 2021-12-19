@@ -1,29 +1,54 @@
 
 const ingresoProducto = document.getElementById("btnAgregar");
 
-ingresoProducto.addEventListener("click",agregar);
+ingresoProducto.addEventListener("click",nodos);
 
+function nodos (){
 
+    //const txtId = document.getElementById("txtId");
+    const txtNombre = document.getElementById("txtNombre");
+    const txtLote = document.getElementById("txtLote");
+    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+    const txtPrecio = document.getElementById("txtPrecio");
 
-function agregar (){
+    //console.log(txtId.value,txtNombre.value,txtLote.value,txtUnidadMedia.value,txtPrecio.value);
+    const data = {nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
+    const cuadro = {nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
+    
+    
+    alerta(data); //Alertara si hay espacio en blanco
+    limpiar(cuadro);
+    post(data);
+
+}
+
+function alerta(data){
+    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
+    if(data.lote ===""){return window.alert(`Lote incompleto`)};
+    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
+    if(data.precio ===""){return window.alert(`Precio incompleto`)};
+    agregar(data);
+}
+
+function agregar (data){
     //creando tabla
     const tabla = document.getElementById("registros");
 
     //creando contenido
     const id = document.createElement("td");
-    id.textContent = "1";
+    id.textContent = data.id;
 
     const nombre = document.createElement("td");
-    nombre.textContent = "Chuleta de res";
+    nombre.textContent = data.nombre;
     
     const lote = document.createElement("td");
-    lote.textContent = "02122021";
+    lote.textContent = data.lote;
 
     const unidadMedida = document.createElement("td");
-    unidadMedida.textContent = "medida kilos ";
+    unidadMedida.textContent = data.unidadMedida;
 
     const precio = document.createElement("td");
-    precio.textContent = "25$";
+    precio.textContent = data.precio;
     
     //console.log(id,nombre,lote,unidadMedida,precio)
 
@@ -33,15 +58,30 @@ function agregar (){
 
     tabla.append(parte);
 
-    /*
-    //const tabla = listo
-    const container = document.createElement("tr");
-    
-    container.append(id,nombre,lote,unidadMedida,precio);
-    array.push(container);
-    
-    container.createElement(array);
-
-    tabla.appendChild(container);
-    document.body.append(...array);*/
 }
+
+function limpiar(data){
+    data.nombre.value = "";
+    data.lote.value = "";
+    data.unidadMedida.value = "";
+    data.precio.value = "";
+}
+
+
+function post(cuadro){
+    var datos = new FormData();
+        
+    datos.append('nombre', cuadro.nombre);
+    datos.append('lote',cuadro.lote);
+
+
+    let formulario = new FormData(document.getElementById("formulario"));
+    fetch("tabla.php?accion=insertar",{
+        method:"POST",
+        body:datos,
+    })
+    .then((e)=>e.json())
+    .then(data=>console.log(data));
+
+}
+
