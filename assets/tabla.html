@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.0.2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+    <div id="mensaje"></div>
+
+    <!--TABLA-->
+    <div class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="row">
+
+            <div class="col-12 cold-sm-1 ">
+                
+                <!--TABLA DE INGRESO -->
+                <div class="card">
+                    <div class="card-header">
+                        Producto
+                    </div>
+                    <div class="container card-body">
+                        <form action="" method="post">
+                            <!--Imput de la tabla-->
+                            <label class="mb-3">
+                                <label for="txtID"     class="form-label">ID</label>
+                                <input type="text"   class="form-control" name="txtID"     id="txtID"     aria-describedby="helpId" placeholder="ID" readonly>
+                            </label>
+                            <label class="mb-3">
+                                <label for="txtNombre" class="form-label">Nombre</label>
+                                <input type="text"   class="form-control" name="txtNombre" id="txtNombre" aria-describedby="helpId" placeholder="Nombre del producto">
+                            </label>
+                            <label class="mb-3">
+                                <label for="txtLote"  class="form-label">Lote</label>
+                                <input type="number" class="form-control" name="txtLote" id="txtLote" aria-describedby="helpId" placeholder="">
+                            </label>
+                            <label class="mb-3">
+                                <label for="txtUnidadMedida"  class="form-label">Unidad de medida</label>
+                                <input type="text" class="form-control" name="txtUnidadMedida" id="txtUnidadMedida" aria-describedby="helpId" placeholder="">
+                            </label>
+                            <label class="mb-3">
+                                <label for="txtPrecio"  class="form-label">Precio</label>
+                                <input type="number" class="form-control" name="txtPrecio" id="txtPrecio" aria-describedby="helpId" placeholder="">
+                            </label>
+                        </form> 
+                    </div>   
+                    <div class="btn-group" role="group" aria-label="">
+                        <div><button id="btnAgregar"  type="button" class="btn btn-success">Agregar</button></div>
+                        
+                        
+                        
+                    </div>
+                </div>
+                
+                <!--TABLA DE INVENTARIO-->       
+                <div class="col-12 cold-sm-2 card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-1">ID</th>
+                                <th class="col-4">Nombre</th>
+                                <th class="col-1">Lote</th>
+                                <th class="col-2">Unidad de Medida</th>
+                                <th class="col-1">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registros">
+                    
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="./tabla.js"></script>
+    <!-- Bootstrap JavaScript Libraries -->
+</body>
+</html>
