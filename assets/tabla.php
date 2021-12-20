@@ -28,6 +28,28 @@ if( isset($_GET['accion'])=="insertar" ){
     exit();
 }
 
+//Actualizar datos
+if(isset($_GET["actualizar"])){
+
+
+    $id=$_POST['id'];
+    $nombre=$_POST['nombre'];
+    $lote=$_POST['lote'];
+    $unidadMedida=$_POST['unidadMedida'];
+    $precio=$_POST['precio'];
+
+    $sentenciaSQL=$conexion->prepare("UPDATE producto SET id=:id,nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE 1");
+    $sentenciaSQL->bindParam(':nombre',$nombre);
+    $sentenciaSQL->bindParam(':lote',$lote);
+    $sentenciaSQL->bindParam(':unidadMedida',$unidadMedida);
+    $sentenciaSQL->bindParam(':precio',$precio);
+    $sentenciaSQL->bindParam(':id',$id);
+    $sentenciaSQL->execute();
+
+    echo json_encode(["success"=>1]);
+    exit();
+}
+
 //vista de los elementos ( sin function)
 $sentenciaSQL=$conexion->prepare("SELECT * FROM producto");
 $sentenciaSQL->execute();
