@@ -11,143 +11,162 @@ limpiarProducto.addEventListener("click",limpiar)
 
 
 function agregar(){
-    
-    //Formulario
-    const txtId = document.getElementById("txtId");
-    const txtNombre = document.getElementById("txtNombre");
-    const txtLote = document.getElementById("txtLote");
-    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
-    const txtPrecio = document.getElementById("txtPrecio");
 
-    //console.log(txtId.value,txtNombre.value,txtLote.value,txtUnidadMedia.value,txtPrecio.value);
-    const data = {id:txtId.value,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
-    const cuadro = {id:txtId,nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
+    console.log("agregar")
+
+    //Formulario
+    const data = nodo();
+   
     
     //alerta
-    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
-    if(data.lote ===""){return window.alert(`Lote incompleto`)};
-    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
-    if(data.precio ===""){return window.alert(`Precio incompleto`)};
+    const mensaje = alerta(data) === "true"
+
+    if(mensaje){
+
+        //post envio de datos
+
+        var datos = new FormData();
+
+        datos.append('nombre',data.nombre.value);
+        datos.append('lote',data.lote.value);
+        datos.append('unidadMedida',data.unidadMedida.value);
+        datos.append('precio',data.precio.value)
+
+        $.ajax({
+            type: "post",
+            url: "tabla.php?accion=insertar",
+            data: datos, //mandando datos a traves de la variable datos
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+            }
+        });
+
+
+        refrescarDatosTabla();
+
+        //limpiando
+
+        data.id.value ="";
+        data.nombre.value = "";
+        data.lote.value = "";
+        data.unidadMedida.value = "";
+        data.precio.value = "";
+
+    }else{
+
+        console.log("mal")
+
+    }
     
     
-    //post envio de datos
-
-    var datos = new FormData();
-
-    datos.append('nombre',data.nombre);
-    datos.append('lote',data.lote);
-    datos.append('unidadMedida',data.unidadMedida);
-    datos.append('precio',data.precio)
-
-    $.ajax({
-        type: "post",
-        url: "tabla.php?accion=insertar",
-        data: datos, //mandando datos a traves de la variable datos
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log(response);
-        }
-    });
-
-
-    refrescarDatosTabla();
-
-    //limpiando
-
-    cuadro.id.value ="";
-    cuadro.nombre.value = "";
-    cuadro.lote.value = "";
-    cuadro.unidadMedida.value = "";
-    cuadro.precio.value = "";
+    
 
 }
 
 
 function editar(){
 
-    //Formulario
-    const txtId = document.getElementById("txtId");
-    const txtNombre = document.getElementById("txtNombre");
-    const txtLote = document.getElementById("txtLote");
-    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
-    const txtPrecio = document.getElementById("txtPrecio");
-
-    //encapsulando
-    const data = {id:txtId,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
-
+    //**Formulario**
+    const data = nodo();
+   
     
-    //seleccionar  (esta en una funcion independiente)
+    //**seleccionar**  (esta en una funcion independiente)
 
 
-    //alerta
-    if(data.id.value ===""){return window.alert(`Id incompleto`);}
-    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
-    if(data.lote ===""){return window.alert(`Lote incompleto`)};
-    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
-    if(data.precio ===""){return window.alert(`Precio incompleto`)};
+    //**alerta**
+
+    const mensaje = alerta(data) === "true"
+
+    if(mensaje){
     
+        if(data.id.value ===""){return window.alert(`Id incompleto`);}
 
-    var datos = new FormData();
+        //post editar de datos
+
+        var datos = new FormData();
         
-    datos.append('a',data.id.value);
-    datos.append('nombre',data.nombre);
-    datos.append('lote',data.lote);
-    datos.append('unidadMedida',data.unidadMedida);
-    datos.append('precio',data.precio);
+        datos.append('a',data.id.value);
+        datos.append('nombre',data.nombre);
+        datos.append('lote',data.lote);
+        datos.append('unidadMedida',data.unidadMedida);
+        datos.append('precio',data.precio);
 
-    //AJAX
-    $.ajax({
-        type: "post",
-        url: "tabla.php?actualizar=1",
-        data: datos, //mandando datos a traves de la variable datos
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log(response);
-            refrescarDatosTabla()
-        }
-    });
+        //AJAX
+        $.ajax({
+            type: "post",
+            url: "tabla.php?actualizar=1",
+            data: datos, //mandando datos a traves de la variable datos
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log(response);
+                refrescarDatosTabla()
+            }
+        });
+        
+        //Limpiando    
+        data.id.value = "";
+        txtNombre.value=""
+        txtLote.value="";
+        txtUnidadMedia.value="";
+        txtPrecio.value="";
+
+        console.log("bien")
     
-    //Limpiando    
-    data.id.value = "";
-    txtNombre.value=""
-    txtLote.value="";
-    txtUnidadMedia.value="";
-    txtPrecio.value="";
+    }else{
+    
+        console.log("mal")
+    
+    }
+
+    
 }
 
 
 function seleccionar(id){
 
-    //console.log(id);
-    const txtId = document.getElementById("txtId");
-    const txtNombre = document.getElementById("txtNombre");
-    const txtLote = document.getElementById("txtLote");
-    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
-    const txtPrecio = document.getElementById("txtPrecio");
+    //Formulario
+    const data = nodo();
+   
 
    // txtId.value=producto;
 
     $.getJSON("tabla.php?consultar="+id,function(registros){
-        console.log(registros[0]["id"]);
-        txtId.value=registros[0]["id"];
-        txtNombre.value=registros[0]["nombre"];
-        txtLote.value=registros[0]["lote"];
-        txtUnidadMedia.value=registros[0]["unidadMedida"];
-        txtPrecio.value=registros[0]["precio"];
+        console.log("seleccionar");
+        data.id.value=registros[0]["id"];
+        data.nombre.value=registros[0]["nombre"];
+        data.lote.value=registros[0]["lote"];
+        data.unidadMedida.value=registros[0]["unidadMedida"];
+        data.precio.value=registros[0]["precio"];
     })
+}
+
+function nodo(){
+     //Formulario
+     const txtId = document.getElementById("txtId");
+     const txtNombre = document.getElementById("txtNombre");
+     const txtLote = document.getElementById("txtLote");
+     const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+     const txtPrecio = document.getElementById("txtPrecio");
+ 
+     //console.log(txtId.value,txtNombre.value,txtLote.value,txtUnidadMedia.value,txtPrecio.value);
+     const data = {id:txtId.value,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
+     const cuadro = {id:txtId,nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
+     return cuadro;
 }
 
 
 function alerta(data){
 
-    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
-    if(data.lote ===""){return window.alert(`Lote incompleto`)};
-    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
-    if(data.precio ===""){return window.alert(`Precio incompleto`)};
-    post(data);
-    refrescarDatosTabla();
+    //alerta
+    if(data.nombre.value ===""){return window.alert(`1Nombre incompleto`);}
+    if(data.lote.value ===""){return window.alert(`1Lote incompleto`)};
+    if(data.unidadMedida.value ===""){return window.alert(`1Unidad de Medida incompleto`)};
+    if(data.precio.value ===""){return window.alert(`1Precio incompleto`)};
+
+    return "true";
 
 }
 
