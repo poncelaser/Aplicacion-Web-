@@ -32,14 +32,14 @@ if( isset($_GET['accion'])=="insertar" ){
 if(isset($_GET["actualizar"])){
 
 
-    $id=$_POST['id'];
+    $id=$_POST['a'];
     $nombre=$_POST['nombre'];
     $lote=$_POST['lote'];
     $unidadMedida=$_POST['unidadMedida'];
     $precio=$_POST['precio'];
 
-    $sentenciaSQL=$conexion->prepare("UPDATE producto SET nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE id=:id");
-    //prepare("UPDATE sistema SET nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE id=:id");
+    $sentenciaSQL=$conexion->prepare("UPDATE producto SET nombre = :nombre , lote = :lote , unidadMedida = :unidadMedida , precio = :precio WHERE producto.id = :id ");
+    //$sentenciaSQL=$conexion->prepare("UPDATE producto SET nombre=:nombre, lote=:lote, unidadMedida=:unidadMedida, precio=:precio WHERE id=:id");
     $sentenciaSQL->bindParam(':nombre',$nombre);
     $sentenciaSQL->bindParam(':lote',$lote);
     $sentenciaSQL->bindParam(':unidadMedida',$unidadMedida);

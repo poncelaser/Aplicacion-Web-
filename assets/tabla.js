@@ -74,8 +74,9 @@ function editar(){
     //encapsulando
     const data = {id:txtId,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
 
-    //seleccionar
-    data
+    
+    //seleccionar  (esta en una funcion independiente)
+
 
     //alerta
     if(data.id.value ===""){return window.alert(`Id incompleto`);}
@@ -87,11 +88,11 @@ function editar(){
 
     var datos = new FormData();
         
-    datos.append('nombre',$('#txtNombre').val());
-    datos.append('id', $('#txtID').val());
-    datos.append('lote',$('#lote').val());
-    datos.append('unidadMedida',$('#unidadMedida').val());
-    datos.append('precio',$('#txtPrecio').val());
+    datos.append('a',data.id.value);
+    datos.append('nombre',data.nombre);
+    datos.append('lote',data.lote);
+    datos.append('unidadMedida',data.unidadMedida);
+    datos.append('precio',data.precio);
 
     //AJAX
     $.ajax({
@@ -102,6 +103,7 @@ function editar(){
         contentType: false,
         success: function (response) {
             console.log(response);
+            refrescarDatosTabla()
         }
     });
     
@@ -112,6 +114,29 @@ function editar(){
     txtUnidadMedia.value="";
     txtPrecio.value="";
 }
+
+
+function seleccionar(id){
+
+    //console.log(id);
+    const txtId = document.getElementById("txtId");
+    const txtNombre = document.getElementById("txtNombre");
+    const txtLote = document.getElementById("txtLote");
+    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+    const txtPrecio = document.getElementById("txtPrecio");
+
+   // txtId.value=producto;
+
+    $.getJSON("tabla.php?consultar="+id,function(registros){
+        console.log(registros[0]["id"]);
+        txtId.value=registros[0]["id"];
+        txtNombre.value=registros[0]["nombre"];
+        txtLote.value=registros[0]["lote"];
+        txtUnidadMedia.value=registros[0]["unidadMedida"];
+        txtPrecio.value=registros[0]["precio"];
+    })
+}
+
 
 function alerta(data){
 
@@ -193,26 +218,8 @@ function refrescarDatosTabla(){
 
 }
 
-function seleccionar(id){
 
-    //console.log(id);
-    const txtId = document.getElementById("txtId");
-    const txtNombre = document.getElementById("txtNombre");
-    const txtLote = document.getElementById("txtLote");
-    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
-    const txtPrecio = document.getElementById("txtPrecio");
 
-   // txtId.value=producto;
-
-    $.getJSON("tabla.php?consultar="+id,function(registros){
-        console.log(registros[0]["id"]);
-        txtId.value=registros[0]["id"];
-        txtNombre.value=registros[0]["nombre"];
-        txtLote.value=registros[0]["lote"];
-        txtUnidadMedia.value=registros[0]["unidadMedida"];
-        txtPrecio.value=registros[0]["precio"];
-    })
-}
 
 
 refrescarDatosTabla();
