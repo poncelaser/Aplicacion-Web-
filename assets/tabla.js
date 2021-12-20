@@ -2,10 +2,12 @@
 //Bottones
 const ingresoProducto = document.getElementById("btnAgregar");
 const editarProducto = document.getElementById("btnEditar");
+const limpiarProducto = document.getElementById("btnLimpiar");
 
 //Eventos
 ingresoProducto.addEventListener("click",agregar);
 editarProducto.addEventListener("click",editar);
+limpiarProducto.addEventListener("click",limpiar)
 
 
 function agregar(){
@@ -151,12 +153,20 @@ function alerta(data){
 
 
 function limpiar(data){
+    //Formulario
+    const txtId = document.getElementById("txtId");
+    const txtNombre = document.getElementById("txtNombre");
+    const txtLote = document.getElementById("txtLote");
+    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+    const txtPrecio = document.getElementById("txtPrecio");
+
     console.log("limpiando")
 
-    data.nombre.value = "";
-    data.lote.value = "";
-    data.unidadMedida.value = "";
-    data.precio.value = "";
+    txtId.value ="";
+    txtNombre.value = "";
+    txtLote.value = "";
+    txtUnidadMedia.value = "";
+    txtPrecio.value = "";
 
 }
 
@@ -217,9 +227,5 @@ function refrescarDatosTabla(){
     
 
 }
-
-
-
-
 
 refrescarDatosTabla();
