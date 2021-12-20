@@ -1,5 +1,6 @@
 
 const ingresoProducto = document.getElementById("btnAgregar");
+const actualizar = document.getElementById("btnActualizar");
 
 ingresoProducto.addEventListener("click",nodos);
 
@@ -18,7 +19,6 @@ function nodos (){
     
     alerta(data); //Alertara si hay espacio en blanco
     limpiar(cuadro);
-    post(data);
 
 }
 
@@ -27,10 +27,70 @@ function alerta(data){
     if(data.lote ===""){return window.alert(`Lote incompleto`)};
     if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
     if(data.precio ===""){return window.alert(`Precio incompleto`)};
-    agregar(data);
+    post(data);
 }
 
-function agregar (data){
+
+
+function limpiar(data){
+    data.nombre.value = "";
+    data.lote.value = "";
+    data.unidadMedida.value = "";
+    data.precio.value = "";
+}
+
+
+//Ingresar datos
+function post(data){
+    var datos = new FormData();
+
+    datos.append('nombre',data.nombre);
+    datos.append('lote',data.lote);
+    datos.append('unidadMedida',data.unidadMedida);
+    datos.append('precio',data.precio)
+
+    $.ajax({
+        type: "post",
+        url: "tabla.php?accion=insertar",
+        data: datos, //mandando datos a traves de la variable datos
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+        }
+    });
+}
+
+//AJAX segunda solicitud (jqGET)
+function refrescarDatosTabla(){
+    //empty limpiara todo, actualizara
+    $('#registros').empty();
+    $.getJSON("tabla.php", function (registros) {
+        var array=[];
+        $.each(registros, function(key, producto){ 
+            if (key>=0) {
+                //Manipulacion del DOM
+                var template="<tr>";
+                template+= "<td>"+producto.id+    "</td>";
+                template+= "<td>"+producto.nombre+"</td>";
+                template+= "<td>"+producto.lote+"</td>";
+                template+= "<td>"+producto.unidadMedida+"</td>";
+                template+= "<td>"+producto.precio+"</td>";
+                template+= "</tr>";
+                array.push(template);
+            }
+        });
+        $("#registros").append(array.join(""));
+        console.log(registros);
+    }
+    );
+}
+refrescarDatosTabla();
+
+/*function agregar (){
+    fetch("tabla.php").then(res=>console.log(res))
+    .then(respuesta=>console.log(respuesta))
+
     //creando tabla
     const tabla = document.getElementById("registros");
 
@@ -58,30 +118,4 @@ function agregar (data){
 
     tabla.append(parte);
 
-}
-
-function limpiar(data){
-    data.nombre.value = "";
-    data.lote.value = "";
-    data.unidadMedida.value = "";
-    data.precio.value = "";
-}
-
-
-function post(cuadro){
-    var datos = new FormData();
-        
-    datos.append('nombre', cuadro.nombre);
-    datos.append('lote',cuadro.lote);
-
-
-    let formulario = new FormData(document.getElementById("formulario"));
-    fetch("tabla.php?accion=insertar",{
-        method:"POST",
-        body:datos,
-    })
-    .then((e)=>e.json())
-    .then(data=>console.log(data));
-
-}
-
+}*/
