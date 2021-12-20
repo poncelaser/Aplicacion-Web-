@@ -38,7 +38,8 @@ if(isset($_GET["actualizar"])){
     $unidadMedida=$_POST['unidadMedida'];
     $precio=$_POST['precio'];
 
-    $sentenciaSQL=$conexion->prepare("UPDATE producto SET id=:id,nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE 1");
+    $sentenciaSQL=$conexion->prepare("UPDATE producto SET nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE id=:id");
+    //prepare("UPDATE sistema SET nombre=:nombre,lote=:lote,unidadMedida=:unidadMedida,precio=:precio WHERE id=:id");
     $sentenciaSQL->bindParam(':nombre',$nombre);
     $sentenciaSQL->bindParam(':lote',$lote);
     $sentenciaSQL->bindParam(':unidadMedida',$unidadMedida);
@@ -47,6 +48,18 @@ if(isset($_GET["actualizar"])){
     $sentenciaSQL->execute();
 
     echo json_encode(["success"=>1]);
+    exit();
+}
+
+//Consultar datos
+if(isset($_GET["consultar"])){
+
+    $id=$_GET["consultar"];
+    $sentenciaSQL= $conexion->prepare("SELECT * FROM producto WHERE id=".$id);
+    $sentenciaSQL->execute();
+
+    $listaMochilas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($listaMochilas);
     exit();
 }
 

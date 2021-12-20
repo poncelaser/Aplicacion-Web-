@@ -1,26 +1,116 @@
 
+//Bottones
 const ingresoProducto = document.getElementById("btnAgregar");
 const editarProducto = document.getElementById("btnEditar");
 
-ingresoProducto.addEventListener("click",nodos);
+//Eventos
+ingresoProducto.addEventListener("click",agregar);
 editarProducto.addEventListener("click",editar);
 
+
+function agregar(){
+    
+    //Formulario
     const txtId = document.getElementById("txtId");
     const txtNombre = document.getElementById("txtNombre");
     const txtLote = document.getElementById("txtLote");
     const txtUnidadMedia = document.getElementById("txtUnidadMedida");
     const txtPrecio = document.getElementById("txtPrecio");
 
-function nodos (){
-
     //console.log(txtId.value,txtNombre.value,txtLote.value,txtUnidadMedia.value,txtPrecio.value);
-    const data = {id:txtId,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
-    const cuadro = {nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
+    const data = {id:txtId.value,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
+    const cuadro = {id:txtId,nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
     
-    alerta(data); //Alertara si hay espacio en blanco
+    //alerta
+    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
+    if(data.lote ===""){return window.alert(`Lote incompleto`)};
+    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
+    if(data.precio ===""){return window.alert(`Precio incompleto`)};
+    
+    
+    //post envio de datos
 
-    limpiar(cuadro);
+    var datos = new FormData();
 
+    datos.append('nombre',data.nombre);
+    datos.append('lote',data.lote);
+    datos.append('unidadMedida',data.unidadMedida);
+    datos.append('precio',data.precio)
+
+    $.ajax({
+        type: "post",
+        url: "tabla.php?accion=insertar",
+        data: datos, //mandando datos a traves de la variable datos
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+        }
+    });
+
+
+    refrescarDatosTabla();
+
+    //limpiando
+
+    cuadro.id.value ="";
+    cuadro.nombre.value = "";
+    cuadro.lote.value = "";
+    cuadro.unidadMedida.value = "";
+    cuadro.precio.value = "";
+
+}
+
+
+function editar(){
+
+    //Formulario
+    const txtId = document.getElementById("txtId");
+    const txtNombre = document.getElementById("txtNombre");
+    const txtLote = document.getElementById("txtLote");
+    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+    const txtPrecio = document.getElementById("txtPrecio");
+
+    //encapsulando
+    const data = {id:txtId,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
+
+    //seleccionar
+    data
+
+    //alerta
+    if(data.id.value ===""){return window.alert(`Id incompleto`);}
+    if(data.nombre ===""){return window.alert(`Nombre incompleto`);}
+    if(data.lote ===""){return window.alert(`Lote incompleto`)};
+    if(data.unidadMedida ===""){return window.alert(`Unidad de Medida incompleto`)};
+    if(data.precio ===""){return window.alert(`Precio incompleto`)};
+    
+
+    var datos = new FormData();
+        
+    datos.append('nombre',$('#txtNombre').val());
+    datos.append('id', $('#txtID').val());
+    datos.append('lote',$('#lote').val());
+    datos.append('unidadMedida',$('#unidadMedida').val());
+    datos.append('precio',$('#txtPrecio').val());
+
+    //AJAX
+    $.ajax({
+        type: "post",
+        url: "tabla.php?actualizar=1",
+        data: datos, //mandando datos a traves de la variable datos
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+        }
+    });
+    
+    //Limpiando    
+    data.id.value = "";
+    txtNombre.value=""
+    txtLote.value="";
+    txtUnidadMedia.value="";
+    txtPrecio.value="";
 }
 
 function alerta(data){
@@ -36,6 +126,7 @@ function alerta(data){
 
 
 function limpiar(data){
+    console.log("limpiando")
 
     data.nombre.value = "";
     data.lote.value = "";
@@ -47,6 +138,9 @@ function limpiar(data){
 
 //Ingresar datos
 function post(data){
+    const nodo = nodos()
+
+    console.log(nodo.nombre)
 
     var datos = new FormData();
 
@@ -68,10 +162,9 @@ function post(data){
 
 }
 
-
 //AJAX segunda solicitud (jqGET)
 function refrescarDatosTabla(){
-
+    
     //empty limpiara todo, actualizara
     $('#registros').empty();
     $.getJSON("tabla.php", function (registros) {
@@ -100,44 +193,26 @@ function refrescarDatosTabla(){
 
 }
 
-function seleccionar(producto){
+function seleccionar(id){
 
-    console.log(producto);
+    //console.log(id);
     const txtId = document.getElementById("txtId");
-    txtId.value=producto;
-    
+    const txtNombre = document.getElementById("txtNombre");
+    const txtLote = document.getElementById("txtLote");
+    const txtUnidadMedia = document.getElementById("txtUnidadMedida");
+    const txtPrecio = document.getElementById("txtPrecio");
+
+   // txtId.value=producto;
+
+    $.getJSON("tabla.php?consultar="+id,function(registros){
+        console.log(registros[0]["id"]);
+        txtId.value=registros[0]["id"];
+        txtNombre.value=registros[0]["nombre"];
+        txtLote.value=registros[0]["lote"];
+        txtUnidadMedia.value=registros[0]["unidadMedida"];
+        txtPrecio.value=registros[0]["precio"];
+    })
 }
 
-function editar(){
-    const data = {id:txtId,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
 
-    if(data.id.value ===""){return window.alert(`Id incompleto`);}
-
-    const datos = new FormData();
-        
-    datos.append('id', data.id);
-    datos.append('nombre',data.nombre);
-    datos.append('lote',data.lote);
-    datos.append('unidadMedida',data.unidadMedida);
-    datos.append('precio',data.precio);
-
-    //AJAX
-    $.ajax({
-        type: "post",
-        url: "tabla.php?actualizar=1",
-        data: datos, //mandando datos a traves de la variable datos
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log(response);
-        }
-    });
-        
-    data.id.value = "";
-
-    data.nombre.value = "";
-    data.lote.value = "";
-    data.unidadMedida.value = "";
-    data.precio.value = "";
-}
 refrescarDatosTabla();
