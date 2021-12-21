@@ -43,16 +43,13 @@ function agregar(){
             }
         });
 
+        //*refescar*
 
         refrescarDatosTabla();
 
         //limpiando
 
-        data.id.value ="";
-        data.nombre.value = "";
-        data.lote.value = "";
-        data.unidadMedida.value = "";
-        data.precio.value = "";
+        limpiar(data)
 
     }else{
 
@@ -83,17 +80,18 @@ function editar(){
     
         if(data.id.value ===""){return window.alert(`Id incompleto`);}
 
-        //post editar de datos
+        //*post editar de datos*
 
         var datos = new FormData();
         
         datos.append('a',data.id.value);
-        datos.append('nombre',data.nombre);
-        datos.append('lote',data.lote);
-        datos.append('unidadMedida',data.unidadMedida);
-        datos.append('precio',data.precio);
+        datos.append('nombre',data.nombre.value);
+        datos.append('lote',data.lote.value);
+        datos.append('unidadMedida',data.unidadMedida.value);
+        datos.append('precio',data.precio.value);
 
-        //AJAX
+        //*AJAX*
+
         $.ajax({
             type: "post",
             url: "tabla.php?actualizar=1",
@@ -106,12 +104,9 @@ function editar(){
             }
         });
         
-        //Limpiando    
-        data.id.value = "";
-        txtNombre.value=""
-        txtLote.value="";
-        txtUnidadMedia.value="";
-        txtPrecio.value="";
+        //*Limpiando*    
+
+        limpiar(data)
 
         console.log("bien")
     
@@ -127,7 +122,8 @@ function editar(){
 
 function seleccionar(id){
 
-    //Formulario
+    //*Formulario*
+
     const data = nodo();
    
 
@@ -144,7 +140,9 @@ function seleccionar(id){
 }
 
 function nodo(){
-     //Formulario
+
+     //*Formulario*
+
      const txtId = document.getElementById("txtId");
      const txtNombre = document.getElementById("txtNombre");
      const txtLote = document.getElementById("txtLote");
@@ -153,14 +151,15 @@ function nodo(){
  
      //console.log(txtId.value,txtNombre.value,txtLote.value,txtUnidadMedia.value,txtPrecio.value);
      const data = {id:txtId.value,nombre:txtNombre.value,lote:txtLote.value,unidadMedida:txtUnidadMedia.value,precio:txtPrecio.value}
-     const cuadro = {id:txtId,nombre:txtNombre,lote:txtLote,unidadMedida:txtUnidadMedia,precio:txtPrecio}
+     const cuadro = {id:txtId, nombre:txtNombre, lote:txtLote, unidadMedida:txtUnidadMedia, precio:txtPrecio}
      return cuadro;
 }
 
 
 function alerta(data){
 
-    //alerta
+    //*alerta*
+
     if(data.nombre.value ===""){return window.alert(`1Nombre incompleto`);}
     if(data.lote.value ===""){return window.alert(`1Lote incompleto`)};
     if(data.unidadMedida.value ===""){return window.alert(`1Unidad de Medida incompleto`)};
@@ -172,26 +171,31 @@ function alerta(data){
 
 
 function limpiar(data){
+
     //Formulario
+
     const txtId = document.getElementById("txtId");
     const txtNombre = document.getElementById("txtNombre");
     const txtLote = document.getElementById("txtLote");
     const txtUnidadMedia = document.getElementById("txtUnidadMedida");
     const txtPrecio = document.getElementById("txtPrecio");
 
-    console.log("limpiando")
+    console.log("limpiando");
 
-    txtId.value ="";
-    txtNombre.value = "";
-    txtLote.value = "";
-    txtUnidadMedia.value = "";
-    txtPrecio.value = "";
+    //data.id.value="";
+    txtId.value="";
+    txtNombre.value="";
+    txtLote.value="";
+    txtUnidadMedia.value="";
+    txtPrecio.value="";
 
 }
 
 
 //Ingresar datos
+
 function post(data){
+
     const nodo = nodos()
 
     console.log(nodo.nombre)
@@ -217,14 +221,17 @@ function post(data){
 }
 
 //AJAX segunda solicitud (jqGET)
+
 function refrescarDatosTabla(){
     
     //empty limpiara todo, actualizara
+
     $('#registros').empty();
     $.getJSON("tabla.php", function (registros) {
         var array=[];
         $.each(registros, function(key, producto){ 
             if (key>=0) {
+
                 //Manipulacion del DOM
                 var template='<tr onclick="seleccionar('+producto.id+')" class="btn-light">';
                 template+= "<td>"+producto.id+    "</td>";
@@ -235,7 +242,7 @@ function refrescarDatosTabla(){
                 template+= "</tr>";
                 array.push(template);
                 
-                '<input class="btn btn-danger" type="button" onclick="borrar('+producto.id+')" value="borrar"></input></td>'
+                //'<input class="btn btn-danger" type="button" onclick="borrar('+producto.id+')" value="borrar"></input></td>'
             }
         });
         $("#registros").append(array.join(""));
